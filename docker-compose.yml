@@ -1,9 +1,10 @@
 version: '3'
 services:
-  h2:
-    container_name: 'h2'
-    hostname: 'h2'
+  oraclexe:
+    container_name: 'oraclexe'
+    hostname: 'oraclexe'
     image: 1000kit/oraclexe
+    shm_size: 1G
     ports:
       - "8080:8080"
       - "1521:1521"
