@@ -6,8 +6,8 @@ services:
     image: 1000kit/oraclexe
     shm_size: 1G
     ports:
-      - "8080:8080"
-      - "1521:1521"
+      - "58080:8080"
+      - "51521:1521"
     volumes:
       - oracle-data:/u01/app/oracle/oradata/oradata
 volumes:
