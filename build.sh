@@ -15,8 +15,6 @@ echo "build oracle database with console "
 docker build --rm --force-rm -t ${IMAGE} .
 
 docker tag ${IMAGE}:latest  ${IMAGE}:11.2.0-1.0
-docker tag ${IMAGE}:latest 728986473007.dkr.ecr.eu-central-1.amazonaws.com/${IMAGE}:latest
-docker tag ${IMAGE}:latest 728986473007.dkr.ecr.eu-central-1.amazonaws.com/${IMAGE}:11.2.0-1.0
 
 
 #end
