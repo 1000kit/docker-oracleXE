@@ -44,3 +44,15 @@ Download `docker-compose.yml` from github. If you need persistence uncomment the
 ~~~~
 $ docker-compose up
 ~~~~
+
+
+## Usage:
+* Apex Login:
+
+~~~
+http://hostname:port/apex/apex_admin
+User: admin
+Password: provided on startup
+~~~
+
+

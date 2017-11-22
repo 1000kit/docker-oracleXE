@@ -3,13 +3,13 @@ services:
   oraclexe:
     container_name: 'oraclexe'
     hostname: 'oraclexe'
-    image: 1000kit/oraclexe
+    image: 1000kit/oraclexe 
     shm_size: 1G
     environment:
-      - ORACLE_PWD="putux"
+      - ORACLE_PWD=putux
     ports:
-      - "8080:8080"
-      - "1521:1521"
+      - 8080:8080
+      - 1521:1521
     volumes:
       - oracle-data:/u01/app/oracle/oradata/oradata
 volumes:
