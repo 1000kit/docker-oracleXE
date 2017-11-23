@@ -11,7 +11,8 @@ services:
       - 8080:8080
       - 1521:1521
     volumes:
-      - oracle-data:/u01/app/oracle/oradata/oradata
+      - oracle-data:/u01/app/oracle/oradata
+      - ./init_data:/opt/init_data
 volumes:
      oracle-data:
 #END

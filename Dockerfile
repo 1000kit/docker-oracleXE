@@ -20,6 +20,7 @@ ENV PATH=$ORACLE_HOME/bin:$PATH
 # Copy binaries
 # -------------
 COPY $INSTALL_FILE_1 install/$CONFIG_RSP install/$RUN_FILE install/$PWD_FILE $INSTALL_DIR/
+#COPY init_data/ /opt/init_data/
 
 # Install Oracle Express Edition
 # ------------------------------
@@ -39,7 +40,9 @@ RUN yum -y install unzip libaio bc initscripts net-tools openssl && \
     cd $HOME && \
     rm -rf $INSTALL_DIR && \
     chmod u+x $ORACLE_BASE/$RUN_FILE && \
-    chmod u+x $ORACLE_BASE/$PWD_FILE
+    chmod u+x $ORACLE_BASE/$PWD_FILE && \
+    mkdir -p /opt/init_data/testt && \
+    chmod -R 755 /opt/init_data
 
 VOLUME ["$ORACLE_BASE/oradata"]
 EXPOSE 1521 8080

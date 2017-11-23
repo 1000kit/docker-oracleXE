@@ -5,13 +5,13 @@ function moveFiles {
    if [ ! -d $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID ]; then
       su -p oracle -c "mkdir -p $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/"
    fi;
-   
+
    su -p oracle -c "mv $ORACLE_HOME/dbs/spfile$ORACLE_SID.ora $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/"
    su -p oracle -c "mv $ORACLE_HOME/dbs/orapw$ORACLE_SID $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/"
    su -p oracle -c "mv $ORACLE_HOME/network/admin/tnsnames.ora $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/"
    su -p oracle -c "mv $ORACLE_HOME/network/admin/listener.ora $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/"
    mv /etc/sysconfig/oracle-xe $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/
-      
+
    symLinkFiles;
 }
 
@@ -21,19 +21,19 @@ function symLinkFiles {
    if [ ! -L $ORACLE_HOME/dbs/spfile$ORACLE_SID.ora ]; then
       ln -s $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/spfile$ORACLE_SID.ora $ORACLE_HOME/dbs/spfile$ORACLE_SID.ora
    fi;
-   
+
    if [ ! -L $ORACLE_HOME/dbs/orapw$ORACLE_SID ]; then
       ln -s $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/orapw$ORACLE_SID $ORACLE_HOME/dbs/orapw$ORACLE_SID
    fi;
-   
+
    if [ ! -L $ORACLE_HOME/network/admin/tnsnames.ora ]; then
       ln -sf $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/tnsnames.ora $ORACLE_HOME/network/admin/tnsnames.ora
    fi;
-   
+
    if [ ! -L $ORACLE_HOME/network/admin/listener.ora ]; then
       ln -sf $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/listener.ora $ORACLE_HOME/network/admin/listener.ora
    fi;
-   
+
    if [ ! -L /etc/sysconfig/oracle-xe ]; then
       ln -s $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/oracle-xe /etc/sysconfig/oracle-xe
    fi;
@@ -63,7 +63,7 @@ function createDB {
    sed -i -e "s|###ORACLE_PWD###|$ORACLE_PWD|g" $ORACLE_BASE/$CONFIG_RSP && \
    /etc/init.d/oracle-xe configure responseFile=$ORACLE_BASE/$CONFIG_RSP
 
-   # Listener 
+   # Listener
    echo "LISTENER = \
   (DESCRIPTION_LIST = \
     (DESCRIPTION = \
@@ -79,7 +79,7 @@ function createDB {
 
    su -p oracle -c "sqlplus / as sysdba <<EOF
       EXEC DBMS_XDB.SETLISTENERLOCALACCESS(FALSE);
-      
+
       ALTER DATABASE ADD LOGFILE GROUP 4 ('$ORACLE_BASE/oradata/$ORACLE_SID/redo04.log') SIZE 50m;
       ALTER DATABASE ADD LOGFILE GROUP 5 ('$ORACLE_BASE/oradata/$ORACLE_SID/redo05.log') SIZE 50m;
       ALTER DATABASE ADD LOGFILE GROUP 6 ('$ORACLE_BASE/oradata/$ORACLE_SID/redo06.log') SIZE 50m;
@@ -88,7 +88,7 @@ function createDB {
       ALTER SYSTEM CHECKPOINT;
       ALTER DATABASE DROP LOGFILE GROUP 1;
       ALTER DATABASE DROP LOGFILE GROUP 2;
-      
+
       ALTER SYSTEM SET db_recovery_file_dest='';
       exit;
 EOF"
@@ -126,6 +126,18 @@ fi;
 if [ "$?" == "0" ]; then
    createDB;
 fi;
+
+echo "#############################"
+echo "DATABASE IS is Up and running"
+echo " configure additional data from init_data"
+echo "#############################"
+cd /opt/init_data
+
+for shfile in [0-9][0-9]*.sh ; do
+   echo "--> execute $shfile"
+   bash -c ./$shfile
+
+done
 
 echo "#########################"
 echo "DATABASE IS READY TO USE!"
